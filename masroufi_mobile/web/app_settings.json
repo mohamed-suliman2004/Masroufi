@@ -1,0 +1,9 @@
+{
+  "app_name": "مصروفي",
+  "latest_version": "1.0.7",
+  "latest_build_number": 8,
+  "release_notes": "تحسين مظهر واجهة المعاملات، وإصلاح تداخل أزرار الإجراءات السفلية مع شريط التنقل، وتحسينات عامة في الأداء ومزامنة الرسائل.",
+  "download_url": "https://masroufi.msulimancode.com/masroufi.apk",
+  "play_store_url": "https://play.google.com/store/apps/details?id=ly.masroufi.masroufi_mobile",
+  "force_update": false
+}

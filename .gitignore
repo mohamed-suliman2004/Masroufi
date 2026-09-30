@@ -1,0 +1,40 @@
+# ===============================
+# Masroufi Root .gitignore
+# ===============================
+
+# Large Binary Files (GitHub rejects files > 100MB)
+*.apk
+*.aab
+*.pdf
+
+# Security & Credentials (CRITICAL)
+key.properties
+*/key.properties
+*.jks
+*.keystore
+.env
+.env.*
+!.env.example
+*.key
+
+# Flutter Mobile
+masroufi_mobile/build/
+masroufi_mobile/.dart_tool/
+masroufi_mobile/.flutter-plugins-dependencies
+masroufi_mobile/.pub-cache/
+masroufi_mobile/.pub/
+
+# Laravel Backend
+masroufi_backend/vendor/
+masroufi_backend/node_modules/
+masroufi_backend/storage/logs/*.log
+masroufi_backend/storage/framework/cache/data/*
+masroufi_backend/storage/framework/sessions/*
+masroufi_backend/storage/framework/views/*
+
+# OS & IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.log
