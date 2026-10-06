@@ -207,50 +207,97 @@ class LibyanBankSmsParser {
     );
   }
 
-  /// Checks if message is an OTP, verification code, future promise, or non-transaction notification
+  /// Normalizes Arabic characters (hamza variants, taa marbouta, alef maqsura) for flexible matching
+  static String normalizeArabicLetters(String text) {
+    return text
+        .replaceAll(RegExp(r'[إأآا]'), 'ا')
+        .replaceAll('ة', 'ه')
+        .replaceAll('ى', 'ي');
+  }
+
+  /// Checks if message is an OTP, verification code, confirmation code, future promise, or non-transaction notification
   static bool isIgnoredMessage(String body) {
     final lower = body.toLowerCase();
+    final norm = normalizeArabicLetters(lower);
 
-    // 1. OTP, verification codes, temporary passwords
-    if (lower.contains('otp') ||
-        lower.contains('كلمة المرور المؤقتة') ||
-        lower.contains('رمز التحقق') ||
-        lower.contains('كود التحقق') ||
-        lower.contains('رمز التأكيد') ||
-        lower.contains('رمز الدخول') ||
-        lower.contains('كود الدخول') ||
-        lower.contains('كود التفعيل') ||
-        lower.contains('رمز التفعيل') ||
-        lower.contains('يرجى عدم مشاركة') ||
-        lower.contains('لا تشارك هذا الرمز') ||
-        lower.contains('@smartbank #')) {
+    // 1. Explicit OTP keywords & confirmation codes
+    if (norm.contains('otp') ||
+        norm.contains('رمز التاكيد') ||
+        norm.contains('كود التاكيد') ||
+        norm.contains('رمز التحقق') ||
+        norm.contains('كود التحقق') ||
+        norm.contains('رمز التفعيل') ||
+        norm.contains('كود التفعيل') ||
+        norm.contains('رمز الامان') ||
+        norm.contains('كود الامان') ||
+        norm.contains('رمز الدخول') ||
+        norm.contains('كود الدخول') ||
+        norm.contains('رمز الشراء') ||
+        norm.contains('كود الشراء') ||
+        norm.contains('رمز الحمايه') ||
+        norm.contains('كود الحمايه') ||
+        norm.contains('رمز العمليه') ||
+        norm.contains('كود العمليه') ||
+        norm.contains('الرمز السري') ||
+        norm.contains('رمز سري') ||
+        norm.contains('كود سري') ||
+        norm.contains('كلمه المرور المؤقته') ||
+        norm.contains('كلمه السر المؤقته') ||
+        norm.contains('passcode') ||
+        norm.contains('verification code') ||
+        norm.contains('confirmation code') ||
+        norm.contains('one-time') ||
+        norm.contains('@smartbank #')) {
       return true;
     }
 
-    // 2. Future reminders, upcoming subscription / bill charges (NOT completed transactions)
-    if (lower.contains('سيتم تحصيل') ||
-        lower.contains('سيتم خصم') ||
-        lower.contains('سوف يتم خصم') ||
-        lower.contains('سوف يتم تحصيل') ||
-        lower.contains('سوف يتم') ||
-        lower.contains('تذكير بموعد') ||
-        lower.contains('تذكير:') ||
-        lower.contains('تذكير :') ||
-        lower.contains('لتجديد اشتراكك') ||
-        lower.contains('يرجى سداد') ||
-        lower.contains('فاتورتك القادمة') ||
-        lower.contains('موعد استحقاق') ||
-        lower.contains('اشتراكك في vip') ||
-        lower.contains('اشتراكك في')) {
+    // 2. OTP advisory phrases & warnings
+    if (norm.contains('عدم مشاركه رمز') ||
+        norm.contains('عدم مشاركه كود') ||
+        norm.contains('عدم مشاركه') ||
+        norm.contains('لا تشارك هذا الرمز') ||
+        norm.contains('لا تشارك رمز') ||
+        norm.contains('لا تشارك كود') ||
+        norm.contains('لا تشارك') ||
+        norm.contains('لا تفصح عن رمز') ||
+        norm.contains('لا تفصح عن') ||
+        norm.contains('لحمايه حسابكم رمز') ||
+        norm.contains('صالح لمده') ||
+        norm.contains('صالحه لمده') ||
+        norm.contains('ينتهي خلال') ||
+        norm.contains('صلاحيه الرمز') ||
+        norm.contains('لتاكيد العمليه') ||
+        norm.contains('لاتمام العمليه') ||
+        norm.contains('لتاكيد الشراء') ||
+        norm.contains('لتاكيد الدفع') ||
+        norm.contains('ادخل الرمز') ||
+        norm.contains('ادخل كود')) {
       return true;
     }
 
-    // 3. Marketing / Promotional
-    if (lower.contains('مبروك لقد ربحت') ||
-        lower.contains('عرض خاص') ||
-        lower.contains('اشترك الآن') ||
-        lower.contains('اشترك الان') ||
-        lower.contains('باقات جديدة')) {
+    // 3. Future reminders & non-completed pre-authorizations
+    if (norm.contains('سيتم خصم') ||
+        norm.contains('سيتم تحصيل') ||
+        norm.contains('سوف يتم خصم') ||
+        norm.contains('سوف يتم تحصيل') ||
+        norm.contains('سوف يتم') ||
+        norm.contains('تذكير بموعد') ||
+        norm.contains('تذكير:') ||
+        norm.contains('تذكير :') ||
+        norm.contains('لتجديد اشتراكك') ||
+        norm.contains('يرجى سداد') ||
+        norm.contains('فاتورتك القادمه') ||
+        norm.contains('موعد استحقاق') ||
+        norm.contains('اشتراكك في vip') ||
+        norm.contains('اشتراكك في')) {
+      return true;
+    }
+
+    // 4. Marketing / Promotional
+    if (norm.contains('مبروك لقد ربحت') ||
+        norm.contains('عرض خاص') ||
+        norm.contains('اشترك الان') ||
+        norm.contains('باقات جديده')) {
       return true;
     }
 
@@ -261,12 +308,25 @@ class LibyanBankSmsParser {
   static bool isOtpMessage(String body) => isIgnoredMessage(body);
 
   static DateTime _extractDate(String body, DateTime? incomingTimestamp) {
-    final match = RegExp(r'(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})').firstMatch(body);
-    if (match != null) {
+    // 1. Try ISO YYYY-MM-DD or YYYY/MM/DD first (e.g. 2026-09-22)
+    final ymdMatch = RegExp(r'(\d{4})[-/](\d{1,2})[-/](\d{1,2})').firstMatch(body);
+    if (ymdMatch != null) {
       try {
-        int d = int.parse(match.group(1)!);
-        int m = int.parse(match.group(2)!);
-        int y = int.parse(match.group(3)!);
+        int y = int.parse(ymdMatch.group(1)!);
+        int m = int.parse(ymdMatch.group(2)!);
+        int d = int.parse(ymdMatch.group(3)!);
+        final now = DateTime.now();
+        return DateTime(y, m, d, incomingTimestamp?.hour ?? now.hour, incomingTimestamp?.minute ?? now.minute);
+      } catch (_) {}
+    }
+
+    // 2. Try DD-MM-YYYY or DD/MM/YYYY (e.g. 22-09-2026 or 22/09/26)
+    final dmyMatch = RegExp(r'(\d{1,2})[-/](\d{1,2})[-/](\d{2,4})').firstMatch(body);
+    if (dmyMatch != null) {
+      try {
+        int d = int.parse(dmyMatch.group(1)!);
+        int m = int.parse(dmyMatch.group(2)!);
+        int y = int.parse(dmyMatch.group(3)!);
         if (y < 100) y += 2000;
         final now = DateTime.now();
         return DateTime(y, m, d, incomingTimestamp?.hour ?? now.hour, incomingTimestamp?.minute ?? now.minute);
@@ -444,6 +504,8 @@ class LibyanBankSmsParser {
     } else if (merchant != null && merchant.isNotEmpty) {
       // 2. Merchant / Store POS title (e.g. سنتر الفرجاني, سوق حور مول)
       title = merchant;
+    } else if (lower.contains('يسر') || lower.contains('yusr')) {
+      title = 'خدمة يسر';
     } else if (lower.contains('سداد') || lower.contains('sadad')) {
       title = isExpense ? 'خدمة سداد' : 'شحن سداد';
     } else if (lower.contains('تداول') || lower.contains('tadawul')) {

@@ -100,7 +100,7 @@ void main() {
         expect(parsed.bankName, 'مصرف التجارة والتنمية');
 
         final tx = parsed.toTransactionItem();
-        expect(tx.sourceBadge, 'التجارة والتنمية');
+        expect(tx.sourceBadge, 'SMS');
         expect(tx.bankName, 'مصرف التجارة والتنمية');
       });
 

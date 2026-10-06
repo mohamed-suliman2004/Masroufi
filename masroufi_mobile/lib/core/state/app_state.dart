@@ -459,9 +459,14 @@ class AppState extends ChangeNotifier {
     if (lowerTitle.contains('سيتم تحصيل') ||
         lowerTitle.contains('سيتم خصم') ||
         lowerTitle.contains('سوف يتم') ||
+        lowerTitle.contains('رمز التأكيد') ||
+        lowerTitle.contains('رمز التاكيد') ||
+        lowerTitle.contains('رمز التحقق') ||
+        lowerTitle.contains('كود التحقق') ||
+        lowerTitle.contains('otp') ||
         lowerTitle.contains('اشتراكك في vip') ||
         lowerTitle.contains('تذكير بموعد')) {
-      return false; // Skip future promises and reminders
+      return false; // Skip future promises, reminders and OTPs
     }
 
     final key = _getUserKey(currentUser);
