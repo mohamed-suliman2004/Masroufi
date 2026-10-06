@@ -40,17 +40,16 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
+        buildTypes {
         release {
             signingConfig = signingConfigs.getByName("release")
+            ndk {
+                debugSymbolLevel = "NONE"
+            }
         }
     }
 
-    packaging {
-        jniLibs {
-            keepDebugSymbols.add("**/*.so")
-        }
-    }
+    
 
 
 }
@@ -64,3 +63,4 @@ kotlin {
 flutter {
     source = "../.."
 }
+
