@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مصروفي | تطبيق إدارة المصاريف والميزانية الذكية في ليبيا</title>
-  <meta name="description" content="تطبيق مصروفي المالي - التطبيق الأول في ليبيا لقراءة رسائل المصارف تلقائياً (التجارة والتنمية، التجاري الوطني، الوحدة وغيرها) وتنظيم ميزانيتك بخصوصية تامة وبدون إنترنت.">
+  <title>مصروفي | تطبيق إدارة المصاريف والميزانية الذكية</title>
+  <meta name="description" content="تطبيق مصروفي المالي - التطبيق الذكي لقراءة رسائل المصارف تلقائياً وتنظيم ميزانيتك ومصاريفك بخصوصية تامة وبدون إنترنت.">
   <link rel="icon" type="image/png" href="assets/icon.png">
 
   <!-- Google Fonts: Alexandria & Plus Jakarta Sans -->
@@ -2010,7 +2010,7 @@
       <div class="hero-content">
         <div class="hero-badge-wrap">
           <span class="hero-badge-pill">جديد</span>
-          <span class="hero-badge-text">دعم رسائل مصرف الجمهورية والتجاري الوطني والوحدة والتجارة والتنمية 🇱🇾</span>
+          <span class="hero-badge-text">دعم رسائل مصرف الجمهورية، التجاري الوطني، الوحدة، التجارة والتنمية وكافة المصارف</span>
         </div>
 
         <h1>
@@ -2019,7 +2019,7 @@
         </h1>
 
         <p>
-          وداعاً لتسجيل المصاريف يدوياً! تطبيق <strong>مصروفي</strong> هو أول رفيق مالي ذكي مصمم خصيصاً للمواطن الليبي؛ يقرأ إشعارات البطاقات والحسابات الجارية فوراً ويصنّف مشترياتك في ثوانٍ، <strong>بخصوصية 100% وبدون إنترنت</strong>.
+          وداعاً لتسجيل المصاريف يدوياً! تطبيق <strong>مصروفي</strong> هو رفيقك المالي الذكي لإدارة ميزانيتك؛ يقرأ إشعارات البطاقات والحسابات الجارية فوراً ويصنّف مشترياتك في ثوانٍ، <strong>بخصوصية 100% وبدون إنترنت</strong>.
         </p>
 
         <div class="hero-cta-group">
@@ -2178,8 +2178,8 @@
           🏦
         </div>
         <div>
-          <h4>متوافق 100% مع شبكات المصارف الليبية</h4>
-          <p>يدعم الرسائل القصيرة لجميع المصارف الرئيسية في ليبيا دون الحاجة لضبط معقد</p>
+          <h4>متوافق 100% مع شبكات المصارف المحلية</h4>
+          <p>يدعم الرسائل القصيرة لجميع المصارف الرئيسية دون الحاجة لضبط معقد</p>
         </div>
       </div>
 
@@ -2215,7 +2215,7 @@
   <!-- Bento Grid of Key Features -->
   <section class="bento-section" id="features">
     <div class="section-header">
-      <span class="section-eyebrow">ابتكار مالي برؤية ليبيّة</span>
+      <span class="section-eyebrow">ابتكار مالي ذكي وسلس</span>
       <h2>كل ما تحتاجه لإحكام السيطرة على أموالك</h2>
       <p>صُمم تطبيق مصروفي ليمنحك تجربة سهلة وسريعة للغاية، بدون أي تعقيد محاسبي أو إدخال بيانات متكرر.</p>
     </div>
@@ -2234,7 +2234,7 @@
         <div style="background: #F8FAFC; border: 1px solid var(--border-light); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: space-between;">
           <div style="font-size: 13px; font-weight: 700; color: var(--emerald-600); display: flex; align-items: center; gap: 8px;">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>محرك ليبيا المالي v2: يفرّق بين سحب الصراف والبطاقات ونقاط البيع</span>
+            <span>محرك الذكاء المالي v2: يفرّق بدقة بين سحب الصراف والبطاقات ونقاط البيع</span>
           </div>
           <span class="num-font" style="font-size: 11px; font-weight: 800; background: var(--emerald-100); color: var(--emerald-700); padding: 2px 8px; border-radius: 6px;">0.02s</span>
         </div>
@@ -2444,7 +2444,7 @@
         </div>
         <div class="workflow-snippet">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>رصد فوري لرسائل جميع المصارف الليبية 🇱🇾</span>
+          <span>رصد فوري ودقيق لرسائل كافة المصارف ⚡</span>
         </div>
       </div>
 
@@ -2524,7 +2524,7 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
             <div>
               <strong>توافق محلي تام</strong>
-              <span>يدعم ويفهم صيغ إشعارات كافة المصارف العاملة في ليبيا.</span>
+              <span>يدعم ويفهم صيغ إشعارات كافة المصارف بدقة واحترافية.</span>
             </div>
           </div>
 
@@ -2550,7 +2550,7 @@
             مصروفي
           </div>
           <p>
-            المنصة الذكية لإدارة المصاريف والميزانيات الشخصية في ليبيا. صُمم بحب لمساعدة كل أسرة وفرد على تنظيم مواردهم المالية بكل سهولة وخصوصية.
+            المنصة الذكية لإدارة المصاريف والميزانيات الشخصية. صُمم باحترافية لمساعدتك في تنظيم أموالك ومتابعة مصاريفك بكل سهولة وخصوصية.
           </p>
         </div>
 
@@ -2577,7 +2577,7 @@
       <div class="footer-bottom">
         <div>جميع الحقوق محفوظة &copy; 2026 تطبيق مصروفي (Masroufi)</div>
         <div class="flag-badge">
-          <span>صُنع بكل فخر للمواطن الليبي 🇱🇾</span>
+          <span>صُمم بكل شغف لإدارة مالية أذكى وأسهل</span>
         </div>
       </div>
     </div>
