@@ -55,13 +55,27 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+
     body {
       font-family: 'Alexandria', sans-serif;
       background-color: var(--bg-main);
       color: var(--text-main);
       line-height: 1.6;
       overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
       position: relative;
+    }
+
+    img, svg, video {
+      max-width: 100%;
+      height: auto;
     }
 
     .num-font {
@@ -1391,10 +1405,13 @@
     }
 
     /* Responsive */
+    /* ========================================================
+       COMPREHENSIVE MOBILE RESPONSIVE ENGINE (Pixel-Perfect)
+       ======================================================== */
     @media (max-width: 1024px) {
-      .hero-grid { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
       .bento-col-7, .bento-col-5, .bento-col-4, .bento-col-8, .bento-col-6 { grid-column: span 12; }
-      .calc-card { grid-template-columns: 1fr; }
+      .calc-card { grid-template-columns: 1fr; gap: 30px; }
       .download-cards-grid { grid-template-columns: 1fr; }
       .workflow-grid { grid-template-columns: 1fr; }
       .pledge-content { grid-template-columns: 1fr; gap: 24px; }
@@ -1402,21 +1419,523 @@
       .trust-pledge-banner { padding: 26px 20px; }
       .hero-content h1 { font-size: 38px; }
     }
+
     @media (max-width: 768px) {
-      .mobile-toggle-btn { display: inline-flex; }
-      .nav-links { display: none; }
-      .nav-actions .nav-btn-play { display: none; }
-      .hero-content h1 { font-size: 28px; }
-      .hero-content p { font-size: 15px; }
-      .hero-cta-group { flex-direction: column; width: 100%; align-items: stretch; }
-      .hero-cta-group a, .hero-cta-group button { width: 100%; justify-content: center; text-align: center; }
-      .calc-card { padding: 20px; }
-      .calc-result-val { font-size: 32px; }
-      .banks-card-wrapper { flex-direction: column; align-items: flex-start; }
-      .download-cards-grid { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr; gap: 30px; }
-      .footer-bottom { flex-direction: column; align-items: flex-start; gap: 14px; }
+      html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      /* Navigation & Header */
+      header {
+        width: 100%;
+        max-width: 100%;
+      }
+      .nav-container {
+        padding: 12px 16px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .brand-logo {
+        gap: 8px;
+      }
+      .brand-logo img {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+      }
+      .brand-title {
+        font-size: 19px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .nav-actions {
+        gap: 8px;
+      }
+      .nav-actions .nav-btn-play {
+        display: none;
+      }
+      .nav-actions .btn-primary {
+        padding: 8px 14px;
+        font-size: 13px;
+        gap: 6px;
+        border-radius: 12px;
+      }
+      .nav-actions .btn-primary svg {
+        width: 14px;
+        height: 14px;
+      }
+      .mobile-toggle-btn {
+        display: inline-flex;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+      }
+      .mobile-drawer {
+        padding: 18px 16px;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        padding: 24px 16px 50px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        width: 100%;
+      }
+      .hero-badge-wrap {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 12px;
+        max-width: 100%;
+        line-height: 1.45;
+        margin-bottom: 18px;
+        white-space: normal;
+      }
+      .hero-badge-pill {
+        font-size: 11px;
+        padding: 2px 8px;
+      }
+      .hero-badge-text {
+        font-size: 12px;
+        line-height: 1.45;
+        word-break: break-word;
+      }
+      .hero-content {
+        width: 100%;
+        max-width: 100%;
+      }
+      .hero-content h1 {
+        font-size: 26px;
+        line-height: 1.35;
+        margin-bottom: 14px;
+        word-break: break-word;
+      }
+      .hero-content h1 br {
+        display: inline;
+        content: ' ';
+      }
+      .hero-content p {
+        font-size: 14.5px;
+        line-height: 1.65;
+        margin-bottom: 24px;
+        max-width: 100%;
+      }
+      .hero-cta-group {
+        flex-direction: column;
+        width: 100%;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .hero-cta-group a, .hero-cta-group button {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 13px 18px;
+        font-size: 14.5px;
+        border-radius: 14px;
+      }
+      .trust-metrics {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        width: 100%;
+        padding-top: 18px;
+      }
+      .trust-item {
+        font-size: 13px;
+        gap: 8px;
+        width: 100%;
+      }
+
+      /* Interactive Live Demo Studio */
+      .interactive-demo-container {
+        width: 100%;
+        max-width: 100%;
+      }
+      .interactive-demo-card {
+        padding: 18px 14px;
+        border-radius: 22px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .demo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 14px;
+        padding-bottom: 12px;
+      }
+      .demo-title {
+        font-size: 14.5px;
+      }
+      .live-indicator {
+        font-size: 11.5px;
+      }
+      .sms-tabs-label {
+        font-size: 11.5px;
+        margin-bottom: 8px;
+      }
+      .sms-bubbles-list {
+        gap: 8px;
+        margin-bottom: 16px;
+        width: 100%;
+      }
+      .sms-bubble-btn {
+        padding: 10px 12px;
+        border-radius: 12px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .sms-header-row {
+        font-size: 11px;
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .sms-sender {
+        flex-wrap: wrap;
+        gap: 4px;
+      }
+      .sms-time {
+        font-size: 10.5px;
+      }
+      .sms-text {
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: normal;
+        word-break: break-word;
+      }
+      .virtual-phone {
+        border-radius: 18px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .phone-app-body {
+        padding: 12px;
+      }
+      .phone-balance-card {
+        padding: 12px 14px;
+        border-radius: 14px;
+        margin-bottom: 10px;
+      }
+      .phone-balance-amount {
+        font-size: 22px;
+      }
+      .phone-scan-alert {
+        padding: 6px 10px;
+        font-size: 11px;
+        margin-bottom: 10px;
+      }
+      .phone-tx-header {
+        font-size: 11px;
+        margin-bottom: 6px;
+      }
+      .demo-tx-item {
+        padding: 8px 10px;
+        font-size: 11.5px;
+      }
+
+      /* Banks Bar Section */
+      .banks-bar-section {
+        padding: 0 16px 45px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .banks-card-wrapper {
+        padding: 18px 16px;
+        border-radius: 18px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .banks-intro {
+        gap: 10px;
+        width: 100%;
+      }
+      .banks-intro-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+      .banks-intro h4 {
+        font-size: 14px;
+      }
+      .banks-intro p {
+        font-size: 12px;
+      }
+      .banks-badges {
+        gap: 8px;
+        width: 100%;
+      }
+      .bank-pill {
+        font-size: 11.5px;
+        padding: 5px 10px;
+      }
+
+      /* Section Headers */
+      .section-header {
+        margin-bottom: 28px;
+        padding: 0 4px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .section-header h2 {
+        font-size: 23px;
+        line-height: 1.35;
+        margin-bottom: 10px;
+      }
+      .section-header p {
+        font-size: 13.5px;
+        line-height: 1.6;
+      }
+
+      /* Bento Innovation Grid */
+      .bento-section {
+        padding: 30px 16px 55px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .bento-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        width: 100%;
+      }
+      .bento-col-7, .bento-col-5, .bento-col-4, .bento-col-8, .bento-col-6 {
+        grid-column: span 1;
+        width: 100%;
+      }
+      .bento-card {
+        padding: 20px 16px;
+        border-radius: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .bento-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+        margin-bottom: 14px;
+        border-radius: 12px;
+      }
+      .bento-card h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .bento-card p {
+        font-size: 13.5px;
+        line-height: 1.6;
+        margin-bottom: 16px;
+      }
+      .bento-pdf-preview {
+        padding: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      /* Calculator Section */
+      .calculator-section {
+        padding: 0 16px;
+        margin-bottom: 55px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .calc-card {
+        padding: 20px 16px;
+        border-radius: 22px;
+        grid-template-columns: 1fr;
+        gap: 22px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .calc-inputs h3 {
+        font-size: 20px;
+      }
+      .calc-inputs p {
+        font-size: 13.5px;
+        margin-bottom: 18px;
+      }
+      .calc-result-box {
+        padding: 22px 16px;
+        border-radius: 18px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .calc-result-val {
+        font-size: 30px;
+      }
+
+      /* Workflow & Trust Shield Section */
+      .workflow-section {
+        padding: 30px 16px 55px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .workflow-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 24px;
+        width: 100%;
+      }
+      .workflow-card {
+        padding: 22px 18px;
+        border-radius: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .workflow-step-num {
+        font-size: 34px;
+        top: 12px;
+        left: 14px;
+      }
+      .workflow-card h3 {
+        font-size: 17px;
+        margin-bottom: 8px;
+      }
+      .workflow-card p {
+        font-size: 13.5px;
+        line-height: 1.6;
+        margin-bottom: 14px;
+      }
+      .trust-pledge-banner {
+        padding: 22px 16px;
+        border-radius: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .pledge-content {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        width: 100%;
+      }
+      .pledge-header h3 {
+        font-size: 18.5px;
+        flex-wrap: wrap;
+      }
+      .pledge-header p {
+        font-size: 13px;
+      }
+      .pledge-features-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        width: 100%;
+      }
+      .pledge-feature-card {
+        padding: 13px;
+        border-radius: 14px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .pledge-feat-title {
+        font-size: 13px;
+      }
+      .pledge-feat-desc {
+        font-size: 11.5px;
+      }
+
+      /* Download Section */
+      .download-section {
+        padding: 30px 16px 55px;
+        width: 100%;
+        max-width: 100%;
+      }
+      .download-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        width: 100%;
+      }
+      .download-card {
+        padding: 24px 18px;
+        border-radius: 20px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .download-card h3 {
+        font-size: 19px;
+      }
+      .download-card p {
+        font-size: 13.5px;
+      }
+      .download-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 18px;
+        font-size: 14px;
+      }
+
+      /* Footer */
+      footer {
+        padding: 45px 16px 25px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
+      .footer-container {
+        width: 100%;
+        max-width: 100%;
+      }
+      .footer-top {
+        grid-template-columns: 1fr;
+        gap: 26px;
+        width: 100%;
+      }
+      .footer-brand p {
+        font-size: 13.5px;
+        max-width: 100%;
+      }
+      .footer-links-group h4 {
+        font-size: 13.5px;
+        margin-bottom: 10px;
+      }
+      .footer-links-group a {
+        font-size: 13px;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 11.5px;
+        padding-top: 20px;
+      }
+      .footer-bottom-links {
+        gap: 12px;
+        flex-wrap: wrap;
+      }
     }
+
+    @media (max-width: 480px) {
+      .hero-content h1 {
+        font-size: 23px;
+      }
+      .section-header h2 {
+        font-size: 21px;
+      }
+      .calc-result-val {
+        font-size: 26px;
+      }
+      .brand-title {
+        font-size: 17.5px;
+      }
+      .nav-actions .btn-primary {
+        padding: 7px 11px;
+        font-size: 12px;
+      }
+    }
+
   </style>
 </head>
 <body>
