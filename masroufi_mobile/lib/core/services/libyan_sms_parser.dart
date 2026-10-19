@@ -220,62 +220,148 @@ class LibyanBankSmsParser {
     final lower = body.toLowerCase();
     final norm = normalizeArabicLetters(lower);
 
-    // 1. Explicit OTP keywords & confirmation codes
+    // 1. Merchant Handover & Authorization Codes (BCD 'سلم البائع', Click, Presto, etc.)
+    // These messages contain an amount and a one-time code to provide to cashier/driver.
+    // They are authorization codes / OTPs, so they MUST NOT be recorded as an expense!
+    if (norm.contains('سلم البائع') ||
+        norm.contains('سلم للتاجر') ||
+        norm.contains('سلم التاجر') ||
+        norm.contains('سلم المتجر') ||
+        norm.contains('سلم المحل') ||
+        norm.contains('سلم السائق') ||
+        norm.contains('سلم المندوب') ||
+        norm.contains('اعط البائع') ||
+        norm.contains('اعط التاجر') ||
+        norm.contains('تزويد البائع') ||
+        norm.contains('تزويد التاجر') ||
+        norm.contains('تزويد المتجر') ||
+        norm.contains('تزويد مقدم الخدمه')) {
+      return true;
+    }
+
+    // 2. Explicit OTP keywords & confirmation codes
     if (norm.contains('otp') ||
-        norm.contains('رمز التاكيد') ||
-        norm.contains('كود التاكيد') ||
-        norm.contains('رمز التحقق') ||
-        norm.contains('كود التحقق') ||
-        norm.contains('رمز التفعيل') ||
-        norm.contains('كود التفعيل') ||
-        norm.contains('رمز الامان') ||
-        norm.contains('كود الامان') ||
-        norm.contains('رمز الدخول') ||
-        norm.contains('كود الدخول') ||
-        norm.contains('رمز الشراء') ||
-        norm.contains('كود الشراء') ||
-        norm.contains('رمز الحمايه') ||
-        norm.contains('كود الحمايه') ||
-        norm.contains('رمز العمليه') ||
-        norm.contains('كود العمليه') ||
-        norm.contains('الرمز السري') ||
-        norm.contains('رمز سري') ||
-        norm.contains('كود سري') ||
-        norm.contains('كلمه المرور المؤقته') ||
-        norm.contains('كلمه السر المؤقته') ||
+        norm.contains('o.t.p') ||
         norm.contains('passcode') ||
         norm.contains('verification code') ||
         norm.contains('confirmation code') ||
         norm.contains('one-time') ||
-        norm.contains('@smartbank #')) {
+        norm.contains('auth code') ||
+        norm.contains('@smartbank #') ||
+        norm.contains('رمز التاكيد') ||
+        norm.contains('كود التاكيد') ||
+        norm.contains('رقم التاكيد') ||
+        norm.contains('رمز التحقق') ||
+        norm.contains('كود التحقق') ||
+        norm.contains('رقم التحقق') ||
+        norm.contains('رمز التفعيل') ||
+        norm.contains('كود التفعيل') ||
+        norm.contains('رقم التفعيل') ||
+        norm.contains('رمز التفويض') ||
+        norm.contains('كود التفويض') ||
+        norm.contains('رقم التفويض') ||
+        norm.contains('رمز التوثيق') ||
+        norm.contains('كود التوثيق') ||
+        norm.contains('رقم التوثيق') ||
+        norm.contains('رمز المصادقه') ||
+        norm.contains('كود المصادقه') ||
+        norm.contains('رقم المصادقه') ||
+        norm.contains('رمز الصرف') ||
+        norm.contains('كود الصرف') ||
+        norm.contains('رقم الصرف') ||
+        norm.contains('رمز السحب') ||
+        norm.contains('كود السحب') ||
+        norm.contains('رقم السحب') ||
+        norm.contains('رمز الاستلام') ||
+        norm.contains('كود الاستلام') ||
+        norm.contains('رقم الاستلام') ||
+        norm.contains('رمز الامان') ||
+        norm.contains('كود الامان') ||
+        norm.contains('رقم الامان') ||
+        norm.contains('رمز الدخول') ||
+        norm.contains('كود الدخول') ||
+        norm.contains('رقم الدخول') ||
+        norm.contains('رمز الشراء') ||
+        norm.contains('كود الشراء') ||
+        norm.contains('رقم الشراء') ||
+        norm.contains('رمز الحمايه') ||
+        norm.contains('كود الحمايه') ||
+        norm.contains('رقم الحمايه') ||
+        norm.contains('رمز العمليه') ||
+        norm.contains('كود العمليه') ||
+        norm.contains('رقم العمليه') ||
+        norm.contains('الرمز السري') ||
+        norm.contains('رمز سري') ||
+        norm.contains('كود سري') ||
+        norm.contains('الرقم السري') ||
+        norm.contains('رقم سري') ||
+        norm.contains('كلمه المرور المؤقته') ||
+        norm.contains('كلمه السر المؤقته') ||
+        norm.contains('رمز المرور المؤقت') ||
+        norm.contains('كود المرور المؤقت')) {
       return true;
     }
 
-    // 2. OTP advisory phrases & warnings
+    // 3. Universal Regex check for OTP patterns: e.g. 'رمز ... 1234', 'كود ... 1234', 'OTP: 1234', etc.
+    final otpRegex = RegExp(
+      r'(?:رمز|كود|الرمز|الكود|otp|passcode)\\s*(?:هو|:|：|\\-)?\\s*[0-9]{3,8}',
+      caseSensitive: false,
+    );
+    if (otpRegex.hasMatch(norm)) {
+      return true;
+    }
+
+    final codePhraseRegex = RegExp(
+      r'[0-9]{3,8}\\s*(?:هو\\s*(?:رمز|كود|الرمز|الكود)|هو\\s*كودك|هو\\s*رمزك)',
+      caseSensitive: false,
+    );
+    if (codePhraseRegex.hasMatch(norm)) {
+      return true;
+    }
+
+    final handoverRegex = RegExp(
+      r'سلم\\s*(?:البائع|التاجر|المتجر|المحل|السائق|المندوب)\\s*(?:الرقم|الكود|الرمز)?\\s*[0-9]+',
+      caseSensitive: false,
+    );
+    if (handoverRegex.hasMatch(norm)) {
+      return true;
+    }
+
+    // 4. OTP advisory phrases & warnings
     if (norm.contains('عدم مشاركه رمز') ||
         norm.contains('عدم مشاركه كود') ||
+        norm.contains('عدم مشاركه الرقم') ||
+        norm.contains('عدم مشاركه هذا') ||
         norm.contains('عدم مشاركه') ||
         norm.contains('لا تشارك هذا الرمز') ||
+        norm.contains('لا تشارك الرمز') ||
         norm.contains('لا تشارك رمز') ||
         norm.contains('لا تشارك كود') ||
+        norm.contains('لا تشارك الرقم') ||
         norm.contains('لا تشارك') ||
         norm.contains('لا تفصح عن رمز') ||
+        norm.contains('لا تفصح عن كود') ||
         norm.contains('لا تفصح عن') ||
         norm.contains('لحمايه حسابكم رمز') ||
+        norm.contains('لحمايه حسابكم') ||
         norm.contains('صالح لمده') ||
         norm.contains('صالحه لمده') ||
         norm.contains('ينتهي خلال') ||
+        norm.contains('ينتهي في خلال') ||
         norm.contains('صلاحيه الرمز') ||
+        norm.contains('صلاحيه الكود') ||
         norm.contains('لتاكيد العمليه') ||
         norm.contains('لاتمام العمليه') ||
         norm.contains('لتاكيد الشراء') ||
         norm.contains('لتاكيد الدفع') ||
+        norm.contains('لاتمام الدفع') ||
         norm.contains('ادخل الرمز') ||
-        norm.contains('ادخل كود')) {
+        norm.contains('ادخل كود') ||
+        norm.contains('ادخل الرقم')) {
       return true;
     }
 
-    // 3. Future reminders & non-completed pre-authorizations
+    // 5. Future reminders & non-completed pre-authorizations
     if (norm.contains('سيتم خصم') ||
         norm.contains('سيتم تحصيل') ||
         norm.contains('سوف يتم خصم') ||
@@ -293,7 +379,7 @@ class LibyanBankSmsParser {
       return true;
     }
 
-    // 4. Marketing / Promotional
+    // 6. Marketing / Promotional
     if (norm.contains('مبروك لقد ربحت') ||
         norm.contains('عرض خاص') ||
         norm.contains('اشترك الان') ||
@@ -442,14 +528,13 @@ class LibyanBankSmsParser {
 
   /// Extracts Merchant / POS / Recipient name accurately
   static String? _extractMerchant(String body) {
-    // 0. BCD pattern: First line is merchant name, followed by 'القيمة' or 'سلم البائع'
+    // 0. BCD pattern: First line is merchant name, followed by 'القيمة'
     final lines = body.trim().split(RegExp(r'[\r\n]+')).map((l) => l.trim()).where((l) => l.isNotEmpty).toList();
     if (lines.length >= 2) {
       final line0 = lines[0];
       final line1 = lines[1];
-      final isBcdFormat = body.contains('سلم البائع') ||
-          (RegExp(r'^(?:القيمة|قيمة)\s*[0-9]+', caseSensitive: false).hasMatch(line1) &&
-              !RegExp(r'^(?:سحب|إيداع|ايداع|رصيد|wabs)', caseSensitive: false).hasMatch(line0));
+      final isBcdFormat = RegExp(r'^(?:القيمة|قيمة)\\s*[0-9]+', caseSensitive: false).hasMatch(line1) &&
+              !RegExp(r'^(?:سحب|إيداع|ايداع|رصيد|wabs)', caseSensitive: false).hasMatch(line0);
       if (isBcdFormat) {
         if (!RegExp(r'(?:سحب|إيداع|ايداع|رصيدكم|رصيد|wabs)', caseSensitive: false).hasMatch(line0) &&
             line0.length >= 2 &&

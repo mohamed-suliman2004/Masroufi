@@ -84,7 +84,7 @@ void main() {
       });
     });
 
-      test('Parses BCD Click payment (شركة كليك)', () {
+      test('Ignores BCD Click OTP / authorization message (سلم البائع الرقم ...) to prevent double calculation', () {
         const body = 'شركة كليك\nالقيمة 89.25 د\nسلم البائع الرقم 9874';
         final parsed = LibyanBankSmsParser.parse(
           sender: '18787',
@@ -92,19 +92,10 @@ void main() {
           registeredBanks: banks,
         );
 
-        expect(parsed, isNotNull);
-        expect(parsed!.title, 'شركة كليك');
-        expect(parsed.amount, 89.25);
-        expect(parsed.category, 'تسوق');
-        expect(parsed.isExpense, true);
-        expect(parsed.bankName, 'مصرف التجارة والتنمية');
-
-        final tx = parsed.toTransactionItem();
-        expect(tx.sourceBadge, 'SMS');
-        expect(tx.bankName, 'مصرف التجارة والتنمية');
+        expect(parsed, isNull, reason: 'BCD OTP containing price must not be counted to prevent double calculation');
       });
 
-      test('Parses BCD Presto payment (بريستو)', () {
+      test('Ignores BCD Presto OTP / authorization message (سلم البائع)', () {
         const body = 'بريستو\nالقيمة 167.0 د\nسلم البائع الرقم 4103';
         final parsed = LibyanBankSmsParser.parse(
           sender: '18787',
@@ -112,15 +103,10 @@ void main() {
           registeredBanks: banks,
         );
 
-        expect(parsed, isNotNull);
-        expect(parsed!.title, 'بريستو');
-        expect(parsed.amount, 167.0);
-        expect(parsed.category, 'مطاعم ومقاهي');
-        expect(parsed.isExpense, true);
-        expect(parsed.bankName, 'مصرف التجارة والتنمية');
+        expect(parsed, isNull, reason: 'Presto OTP code with amount must be ignored');
       });
 
-      test('Parses BCD Al-Tahdith payment (التحديث)', () {
+      test('Ignores BCD Al-Tahdith OTP / authorization message', () {
         const body = 'التحديث\nالقيمة 50.0 د\nسلم البائع الرقم 2852';
         final parsed = LibyanBankSmsParser.parse(
           sender: '18787',
@@ -128,11 +114,40 @@ void main() {
           registeredBanks: banks,
         );
 
+        expect(parsed, isNull, reason: 'Al-Tahdith OTP code with amount must be ignored');
+      });
+
+      test('Parses actual completed BCD transaction debit notification', () {
+        const body = 'تم خصم قيمة 89.25 د.ل من حسابكم لصالح شركة كليك\nرصيدكم: 12000.00 د.ل';
+        final parsed = LibyanBankSmsParser.parse(
+          sender: '18787',
+          body: body,
+          registeredBanks: banks,
+        );
+
         expect(parsed, isNotNull);
-        expect(parsed!.title, 'التحديث');
-        expect(parsed.amount, 50.0);
-        expect(parsed.category, 'تسوق');
+        expect(parsed!.amount, 89.25);
         expect(parsed.isExpense, true);
+        expect(parsed.bankName, 'مصرف التجارة والتنمية');
+      });
+
+      test('Universal rule: Any message with OTP and amount is completely ignored', () {
+        final otpSamples = [
+          'القيمة 50 دينار رمز التأكيد: 492040 لا تشارك هذا الرمز',
+          'تم طلب شراء بمبلغ 120 د.ل كود التحقق 551928 صالح لمدة 5 دقائق',
+          'مبلغ العملية 35 د.ل رمز التفويض الخاص بكم هو 882910',
+          'قيمة المعاملة 75 د.ل سلم للتاجر الرمز 4492',
+          'مبلغ 200 د.ل OTP: 981240 صالح لمرة واحدة',
+        ];
+
+        for (final sample in otpSamples) {
+          final p = LibyanBankSmsParser.parse(
+            sender: '18787',
+            body: sample,
+            registeredBanks: banks,
+          );
+          expect(p, isNull, reason: 'Failed to ignore OTP sample: \$sample');
+        }
       });
 
         group('المصرف التجاري الوطني (NCB) Tests', () {

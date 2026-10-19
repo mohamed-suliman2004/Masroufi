@@ -143,5 +143,35 @@ void main() {
       );
       expect(parsed, isNull);
     });
+
+    test('CRITICAL: Universal Rule - ANY message containing OTP and an amount must NOT be calculated', () {
+      final testCases = [
+        // BCD merchant handovers
+        {'sender': '18787', 'body': 'شركة كليك\nالقيمة 89.25 د\nسلم البائع الرقم 9874'},
+        {'sender': '18787', 'body': 'بريستو\nالقيمة 167.0 د\nسلم البائع الرقم 4103'},
+        {'sender': '18787', 'body': 'توصيل سريع\nالمبلغ 45.00 د.ل\nسلم السائق الرقم 5512'},
+        {'sender': '18787', 'body': 'متجر النجمة\nالقيمة 120 د.ل\nاعط البائع الرقم 3311'},
+        // NCB OTP with amount
+        {'sender': 'NCB', 'body': 'سيتم خصم القيمة 550.65 من حسابكم، اسم التاجر سوق حور مول يرجى عدم مشاركة رمز التأكيد مع أي جهة لحماية حسابكم، رمز التأكيد: 147373'},
+        {'sender': 'NCB', 'body': 'طلب شراء بمبلغ 75 دينار، رمز التحقق هو 491029 لا تشارك الرمز'},
+        // Jumhouria OTP with amount
+        {'sender': 'Jumhouria', 'body': 'مصرف الجمهورية: تم طلب دفع بقيمة 150 د.ل، كود التأكيد 883019 صالح لمدة 3 دقائق'},
+        {'sender': 'Jumhouria', 'body': 'رمز المصادقة لإتمام شراء 250 د.ل هو 129481'},
+        // Wahda OTP with amount
+        {'sender': 'WahdaBank', 'body': 'مصرف الوحدة: لتأكيد تحويل 500 د.ل ادخل رمز التفويض: 902144'},
+        {'sender': 'WahdaBank', 'body': 'OTP: 662810 لتأكيد خصم 30 د.ل من بطاقتكم'},
+        // OnePay OTP with amount
+        {'sender': 'OnePay', 'body': 'OnePay: رمز التأكيد 771239 لإتمام عملية دفع 40.00 د.ل'},
+      ];
+
+      for (final tc in testCases) {
+        final p = LibyanBankSmsParser.parse(
+          sender: tc['sender']!,
+          body: tc['body']!,
+          registeredBanks: banks,
+        );
+        expect(p, isNull, reason: 'Must ignore OTP message with amount: ${tc["body"]}');
+      }
+    });
   });
 }

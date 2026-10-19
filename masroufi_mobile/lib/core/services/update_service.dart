@@ -40,8 +40,8 @@ class AppUpdateInfo {
 
 class UpdateService {
   // Current installed app version & build number
-  static const String currentVersion = '1.1.0';
-  static const int currentBuildNumber = 11;
+  static const String currentVersion = '1.1.1';
+  static const int currentBuildNumber = 12;
 
   static const MethodChannel _methodChannel = MethodChannel('ly.masroufi.sms/channel');
 

@@ -463,6 +463,14 @@ class AppState extends ChangeNotifier {
         lowerTitle.contains('رمز التاكيد') ||
         lowerTitle.contains('رمز التحقق') ||
         lowerTitle.contains('كود التحقق') ||
+        lowerTitle.contains('سلم البائع') ||
+        lowerTitle.contains('سلم للتاجر') ||
+        lowerTitle.contains('كود التأكيد') ||
+        lowerTitle.contains('كود التاكيد') ||
+        lowerTitle.contains('رمز التفويض') ||
+        lowerTitle.contains('كود التفويض') ||
+        lowerTitle.contains('رمز التوثيق') ||
+        lowerTitle.contains('كود التوثيق') ||
         lowerTitle.contains('otp') ||
         lowerTitle.contains('اشتراكك في vip') ||
         lowerTitle.contains('تذكير بموعد')) {
