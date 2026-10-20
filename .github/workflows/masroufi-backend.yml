@@ -1,0 +1,43 @@
+﻿name: Deploy Masroufi Backend (API)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'masroufi_backend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Copy Backend to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: "masroufi_backend/*"
+          target: "/var/www/masroufi_backend/"
+          strip_components: 1
+
+      - name: Run Backend Tasks (Composer, Migrations, Cache)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            cd /var/www/masroufi_backend
+            composer install --no-dev --optimize-autoloader --no-interaction
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            chown -R www-data:www-data /var/www/masroufi_backend/storage /var/www/masroufi_backend/bootstrap/cache
+            chmod -R 775 /var/www/masroufi_backend/storage /var/www/masroufi_backend/bootstrap/cache
+            systemctl reload php8.3-fpm
+            systemctl reload nginx

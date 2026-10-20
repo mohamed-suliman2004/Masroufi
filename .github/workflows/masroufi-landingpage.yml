@@ -1,0 +1,36 @@
+﻿name: Deploy Masroufi Landing Page
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Masroufi.LandingPage/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Copy Landing Page to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: "Masroufi.LandingPage/*"
+          target: "/var/www/masroufi_web/"
+          strip_components: 1
+
+      - name: Set Permissions & Reload Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            chown -R www-data:www-data /var/www/masroufi_web/
+            chmod -R 755 /var/www/masroufi_web/
+            systemctl reload nginx

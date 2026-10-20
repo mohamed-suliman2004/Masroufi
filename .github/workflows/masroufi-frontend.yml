@@ -1,0 +1,58 @@
+﻿name: Deploy Masroufi Frontend (Web App)
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'masroufi_mobile/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Install Dependencies
+        run: |
+          cd masroufi_mobile
+          flutter pub get
+
+      - name: Build Web App
+        run: |
+          cd masroufi_mobile
+          flutter build web --release --base-href "/app/"
+
+      - name: Copy Flutter Web to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          source: "masroufi_mobile/build/web/*"
+          target: "/var/www/masroufi_web/app/"
+          strip_components: 3
+
+      - name: Set Permissions & Reload Nginx
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          password: ${{ secrets.VPS_PASSWORD }}
+          script: |
+            chown -R www-data:www-data /var/www/masroufi_web/app/
+            chmod -R 755 /var/www/masroufi_web/app/
+            systemctl reload nginx
